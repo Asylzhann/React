@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Runner — Async Practice</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>Task Runner</h1>
+    <p>A small demo of closures, promises, and the JavaScript event loop.</p>
+  </header>
+
+  <!-- ============ SECTION 1: the tasks ============ -->
+  <section>
+    <h2>Tasks</h2>
+
+    <!-- One card per task. Each card is built by hand so the HTML stays
+         easy to read. JavaScript only fills in the status/count/time. -->
+
+    <div class="task" id="task-users">
+      <div class="task-name">Load Users</div>
+      <div class="task-info">
+        Status: <span class="status">idle</span><br>
+        Runs: <span class="count">0</span><br>
+        Last time: <span class="time">—</span>
+      </div>
+      <button class="run-btn">Run</button>
+      <button class="reset-btn">Reset</button>
+    </div>
+
+    <div class="task" id="task-posts">
+      <div class="task-name">Load Posts</div>
+      <div class="task-info">
+        Status: <span class="status">idle</span><br>
+        Runs: <span class="count">0</span><br>
+        Last time: <span class="time">—</span>
+      </div>
+      <button class="run-btn">Run</button>
+      <button class="reset-btn">Reset</button>
+    </div>
+
+    <div class="task" id="task-comments">
+      <div class="task-name">Load Comments</div>
+      <div class="task-info">
+        Status: <span class="status">idle</span><br>
+        Runs: <span class="count">0</span><br>
+        Last time: <span class="time">—</span>
+      </div>
+      <button class="run-btn">Run</button>
+      <button class="reset-btn">Reset</button>
+    </div>
+
+    <p id="all-done-message"></p>
+  </section>
+
+  <!-- ============ SECTION 2: buttons ============ -->
+  <section>
+    <h2>Experiments</h2>
+    <button id="run-all-btn">Run All Tasks (concurrent)</button>
+    <button id="run-sequential-btn">Run Sequential</button>
+    <button id="compare-btn">Compare Sequential vs Concurrent</button>
+    <button id="event-loop-btn">Run Event Loop Demo</button>
+    <button id="clear-log-btn">Clear Log</button>
+  </section>
+
+  <!-- ============ SECTION 3: the log ============ -->
+  <section>
+    <h2>Log</h2>
+    <p class="hint">Everything here is also printed to the browser console (F12).</p>
+    <pre id="log"></pre>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>

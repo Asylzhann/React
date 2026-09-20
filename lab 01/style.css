@@ -1,0 +1,110 @@
+/* Simple, plain CSS. Nothing clever — easy to read and change. */
+
+body {
+  font-family: system-ui, Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #f7f7f8;
+  color: #1c1c1e;
+  line-height: 1.5;
+}
+
+header h1 {
+  margin-bottom: 4px;
+}
+
+header p {
+  margin-top: 0;
+  color: #666;
+}
+
+section {
+  background: #ffffff;
+  border: 1px solid #e0e0e3;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+/* --- task cards --- */
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid #e0e0e3;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.task-name {
+  font-weight: bold;
+  width: 140px;
+}
+
+.task-info {
+  flex: 1;
+  font-size: 14px;
+  color: #555;
+}
+
+/* The status word gets a colour depending on its text.
+   JavaScript adds one of these classes. */
+.status        { font-weight: bold; }
+.status.idle    { color: #777; }
+.status.running { color: #b07400; }
+.status.done    { color: #1a7f37; }
+.status.failed  { color: #c62828; }
+
+/* --- buttons --- */
+
+button {
+  font: inherit;
+  padding: 6px 12px;
+  border: 1px solid #c8c8cc;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  margin-right: 6px;
+}
+
+button:hover {
+  background: #eeeef0;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- log --- */
+
+#log {
+  background: #1c1c1e;
+  color: #e6e6e6;
+  padding: 14px;
+  border-radius: 6px;
+  min-height: 120px;
+  max-height: 340px;
+  overflow-y: auto;
+  font-size: 13px;
+  white-space: pre-wrap;
+}
+
+.hint {
+  font-size: 13px;
+  color: #777;
+  margin-top: 0;
+}
+
+#all-done-message {
+  font-weight: bold;
+  color: #1a7f37;
+}
