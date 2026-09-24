@@ -1,0 +1,41 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(20, 20, 26, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+
+.header__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+}
+
+.header__nav {
+  display: flex;
+  gap: 28px;
+}
+
+.header__nav a {
+  text-decoration: none;
+  font-size: 0.95rem;
+  color: var(--off-white);
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.header__nav a:hover {
+  color: var(--amber);
+}
+
+@media (max-width: 640px) {
+  .header__nav {
+    gap: 16px;
+  }
+  .header__nav a {
+    font-size: 0.85rem;
+  }
+}
