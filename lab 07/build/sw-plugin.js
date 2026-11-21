@@ -3,10 +3,6 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 
-// Build step: creates dist/sw.js from build/sw-template.js.
-// It lists every file of the build (so they can be pre-cached) and computes a version from their content.
-// A new build with any change therefore gets a new version, a new cache and an update notification.
-
 const here = path.dirname(fileURLToPath(import.meta.url));
 
 export const DEFAULTS = {

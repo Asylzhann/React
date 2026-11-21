@@ -1,13 +1,3 @@
-/* Service worker for Pet Shelter.
- *
- * This file is a TEMPLATE. During `npm run build`, build/sw-plugin.js copies it to dist/sw.js and
- * replaces the placeholders below (version, list of files to pre-cache, API hosts, cache limits).
- *
- * Lifecycle:  install  -> pre-cache the app shell
- *             waiting  -> a new version waits until the user presses "Update" in the app
- *             activate -> delete old caches, take control of open pages
- *             fetch    -> answer requests with one of the strategies below
- */
 
 const VERSION = "__VERSION__";
 const PRECACHE_URLS = /*__PRECACHE_URLS__*/ [];

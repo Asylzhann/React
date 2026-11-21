@@ -11,35 +11,33 @@ import StatusMessage from "./components/StatusMessage";
 import Notice from "./components/Notice";
 import "./App.css";
 
-// What the details panel shows until the right pet has arrived
+// Placeholder shown while the selected pet's details are loading
 const LOADING_DETAILS = { id: null, status: "loading", item: null, error: "" };
 
-// Root component. It owns the data and both effects:
-//   effect 1 loads the list, effect 2 loads the details of the selected pet.
 export default function App() {
-  // ---- the list ----
+  // List
   const [list, setList] = useState({ status: "loading", items: [], total: 0, totalPages: 0, error: "" });
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState("name");
   const [search, setSearch] = useState("");
-  const [reloadCount, setReloadCount] = useState(0); // bump it to load the list again
+  const [reloadCount, setReloadCount] = useState(0);
 
-  // ---- the selected pet and its details ----
+  // Selected pet
   const [selectedId, setSelectedId] = useState(null);
   const [details, setDetails] = useState(LOADING_DETAILS);
-  const [detailsAttempt, setDetailsAttempt] = useState(0); // bump it to retry the details
+  const [detailsAttempt, setDetailsAttempt] = useState(0);
 
-  // ---- create / edit / actions ----
-  const [form, setForm] = useState(null); // null, or { mode: "create" | "edit", item }
+  // Form, saving and actions
+  const [form, setForm] = useState(null);
   const [formError, setFormError] = useState("");
-  const [saving, setSaving] = useState(false); // a create or edit request is running
-  const [busyIds, setBusyIds] = useState([]); // pets with a status or delete request running
-  const [notice, setNotice] = useState(null); // { kind: "success" | "error", text }
+  const [saving, setSaving] = useState(false);
+  const [busyIds, setBusyIds] = useState([]);
+  const [notice, setNotice] = useState(null);
 
-  // EFFECT 1: load the list.
-  // It runs after the first render and again whenever page, sort, search or reloadCount changes.
+  // Effect 1: load the list.
+  // Runs on mount and whenever page, sort, search or reloadCount changes.
   useEffect(() => {
-    let ignore = false; // the cleanup sets this to true: "this request is outdated"
+    let ignore = false; // set to true by the cleanup when this request becomes outdated
     setList((prev) => ({ ...prev, status: "loading", error: "" }));
 
     const params = new URLSearchParams({ page, limit: PAGE_SIZE, sort });
@@ -47,9 +45,9 @@ export default function App() {
 
     getItemsList(`?${params}`)
       .then((result) => {
-        if (ignore) return; // a newer request replaced this one, drop the answer
+        if (ignore) return; // outdated request: discard its answer
         if (result.totalPages > 0 && page > result.totalPages) {
-          setPage(result.totalPages); // the last pet of the last page was removed
+          setPage(result.totalPages); // this page no longer exists (e.g. its last pet was removed)
           return;
         }
         setList({ status: "success", items: result.data, total: result.total, totalPages: result.totalPages, error: "" });
@@ -59,13 +57,12 @@ export default function App() {
       });
 
     return () => {
-      ignore = true; // runs before the next run of this effect, and when App is removed
+      ignore = true; // runs before the next effect run and on unmount
     };
   }, [page, sort, search, reloadCount]);
 
-  // EFFECT 2: load the details of the selected pet.
-  // The request belongs to ONE selectedId. If the user picks another pet, the cleanup
-  // marks this request as outdated, so a slow answer can never replace newer details.
+  // Effect 2: load the details of the selected pet.
+  // If another pet is selected, the cleanup marks the previous request as outdated,
   useEffect(() => {
     if (selectedId === null) return;
     let ignore = false;
@@ -73,7 +70,7 @@ export default function App() {
 
     getItem(selectedId)
       .then((item) => {
-        // selectedId here is the value from the render that started this request (a closure on purpose)
+        // selectedId comes from the render that started this request, so the answer is labelled with the right pet
         if (!ignore) setDetails({ id: selectedId, status: "success", item, error: "" });
       })
       .catch((err) => {
@@ -85,8 +82,7 @@ export default function App() {
     };
   }, [selectedId, detailsAttempt]);
 
-  // Details that belong to a different pet than the selected one are treated as "still loading".
-  // This avoids showing the previous pet for a moment after switching.
+  // Details stored for a different pet count as "still loading",
   const shown = details.id === selectedId ? details : LOADING_DETAILS;
 
   const reload = () => setReloadCount((c) => c + 1);
@@ -117,9 +113,9 @@ export default function App() {
     setForm({ mode: "edit", item: shown.item });
   };
 
-  // Create a new pet, or save the edited one
+  // Create a pet or save the edited one
   async function savePet(values) {
-    const current = form; // read the form BEFORE the first await
+    const current = form; // copy before the first await
     setSaving(true);
     setFormError("");
     try {
@@ -137,7 +133,7 @@ export default function App() {
       reload();
     } catch (err) {
       if (err.createdId !== undefined) {
-        // the first request worked and the second failed, so a half-filled pet exists
+        // the pet was created but its details failed to save (see createPet)
         setForm(null);
         reload();
         setNotice({ kind: "error", text: "The pet was created, but its details could not be saved. Select it and press Edit to finish." });
@@ -149,15 +145,15 @@ export default function App() {
     }
   }
 
-  // Change the status of a pet (reserve, mark as adopted, make available)
+  // Change a pet's status (reserve, mark as adopted, make available)
   async function changeStatus(pet, status) {
-    const { id, name } = pet; // captured NOW, because the user may select another pet before the answer arrives
-    if (busyIds.includes(id)) return; // never run two requests on the same pet at once
+    const { id, name } = pet; // copy now: the user may select another pet before the answer arrives
+    if (busyIds.includes(id)) return; // one request per pet at a time
     setBusyIds((prev) => [...prev, id]);
     setNotice(null);
     try {
       const updated = await updateItem(id, { status });
-      // Update by the captured id, never by selectedId
+      // Update by the copied id, not by selectedId
       setList((prev) => ({ ...prev, items: prev.items.map((p) => (p.id === id ? updated : p)) }));
       setDetails((prev) => (prev.item && prev.item.id === id ? { ...prev, item: updated } : prev));
       setNotice({ kind: "success", text: `${name} is now ${status.toLowerCase()}.` });
@@ -176,7 +172,7 @@ export default function App() {
     setNotice(null);
     try {
       await deleteItem(id);
-      setSelectedId((current) => (current === id ? null : current)); // only close the panel if it still shows this pet
+      setSelectedId((current) => (current === id ? null : current)); // close the panel only if it still shows this pet
       setNotice({ kind: "success", text: `${name} was removed.` });
       reload();
     } catch (err) {

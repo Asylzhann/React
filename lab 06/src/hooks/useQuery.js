@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { peek, fetchWithCache, invalidate } from "../services/cache";
 
-// Loads data through the cache and tracks its status: "loading" | "success" | "error".
-//   queryKey: array that identifies the data, e.g. ["pets", "detail", 3]
-//   queryFn:  function that returns a Promise with the data (called only when the cache has no fresh copy)
-// Returns { status, data, error, reload, setData }.
+
 export function useQuery(queryKey, queryFn) {
   const [attempt, setAttempt] = useState(0); // bumped by reload()
   const key = JSON.stringify([queryKey, attempt]); // identifies "this request"

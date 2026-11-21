@@ -1,13 +1,3 @@
-// A small cache for server data (a hand-made version of what TanStack Query does).
-//
-// Strategy:
-//  - Every entry is stored under a QUERY KEY, an array such as ["pets", "list", { search, sort }].
-//  - An entry is FRESH for DEFAULT_TTL milliseconds. While fresh, the cached data is returned
-//    and no request is made. After that it is EXPIRED: it is deleted and loaded again.
-//  - Two callers asking for the same key at the same time share ONE request.
-//  - invalidate(prefix) deletes every entry whose key starts with the prefix.
-//    It is called after create / update / delete, so the next read loads fresh data.
-
 export const DEFAULT_TTL = 30_000; // 30 seconds
 
 const entries = new Map(); // key text -> { data, expiresAt }
