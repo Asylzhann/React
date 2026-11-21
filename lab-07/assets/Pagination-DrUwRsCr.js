@@ -1,0 +1,1 @@
+import{j as n}from"./index-m9j5Rrho.js";function t({page:i,totalPages:s,onChange:r}){return n.jsxs("nav",{className:"pagination","aria-label":"Pages",children:[n.jsx("button",{onClick:()=>r(i-1),disabled:i<=1,children:"Previous"}),n.jsxs("span",{children:["Page ",i," of ",s]}),n.jsx("button",{onClick:()=>r(i+1),disabled:i>=s,children:"Next"})]})}export{t as P};
