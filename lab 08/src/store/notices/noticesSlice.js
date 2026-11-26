@@ -17,7 +17,6 @@ const noticesSlice = createSlice({
       state.items = state.items.filter((notice) => notice.id !== action.payload);
     },
   },
-  // The pets thunks report their result here, so no page has to write these messages.
   extraReducers: (builder) => {
     const add = (state, action, kind, text) => {
       state.items.push({ id: action.meta.requestId, kind, text });

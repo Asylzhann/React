@@ -3,21 +3,16 @@ import { petsAdapter } from "./petsSlice";
 import { SPECIES, STATUSES, SIZES } from "../../constants";
 import { sortPets } from "../../utils/format";
 
-// ---------- simple selectors (reusable) ----------
 const adapter = petsAdapter.getSelectors((state) => state.pets);
 export const selectAllPets = adapter.selectAll;
-export const selectPetById = adapter.selectById; // (state, id)
+export const selectPetById = adapter.selectById;
 
 export const selectPetsListStatus = (state) => state.pets.list.status;
 export const selectPetsListError = (state) => state.pets.list.error;
 export const selectPetsLoaded = (state) => state.pets.list.loadedAt !== null;
-export const selectPetDetails = (state, id) => state.pets.details[id]; // { status, error, loadedAt } or undefined
+export const selectPetDetails = (state, id) => state.pets.details[id];
 
-// ---------- memoized selectors (createSelector) ----------
-// They are recalculated only when the pets or one of the filter values changes.
-// `filters` is an object from the URL; each input selector picks ONE value from it.
-
-// Filter by search text, species, status and shelter, then sort.
+// Each input selector picks ONE value from `filters` (a new object on every render), so the result stays memoized.
 export const selectFilteredPets = createSelector(
   [
     selectAllPets,
@@ -40,7 +35,6 @@ export const selectFilteredPets = createSelector(
   }
 );
 
-// Everything the dashboard shows, for one shelter (or all shelters when `shelter` is "").
 export const selectDashboard = createSelector([selectAllPets, (_state, shelter) => shelter], (pets, shelter) => {
   const inScope = shelter ? pets.filter((p) => p.location === shelter) : pets;
   const count = (field, value) => inScope.filter((p) => p[field] === value).length;

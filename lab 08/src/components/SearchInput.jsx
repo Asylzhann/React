@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 // `value` is the text from the URL; the typed text is local until it is reported.
 export default function SearchInput({ value, onSearch, placeholder, label, delay = 400 }) {
   const [text, setText] = useState(value);
-  const sent = useRef(value); // the last text that was reported (or came from the URL)
+  const sent = useRef(value);
   const report = useRef(onSearch);
   report.current = onSearch; // always the newest function, so a waiting timer never uses outdated URL values
 
@@ -16,7 +16,6 @@ export default function SearchInput({ value, onSearch, placeholder, label, delay
     }
   }, [value]);
 
-  // Every keystroke restarts the timer; only the last one survives.
   useEffect(() => {
     const trimmed = text.trim();
     if (trimmed === sent.current) return;

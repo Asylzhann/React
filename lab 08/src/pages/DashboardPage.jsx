@@ -9,9 +9,9 @@ import Breakdown from "../components/Breakdown";
 
 export default function DashboardPage() {
   const [params, setParams] = useSearchParams();
-  const shelter = LOCATIONS.includes(params.get("shelter")) ? params.get("shelter") : ""; // the interactive filter
-  const pets = usePetList(); // loads the pets (shared with the pets page: one copy in the store)
-  const data = useSelector((state) => selectDashboard(state, shelter)); // memoized: counts and groups
+  const shelter = LOCATIONS.includes(params.get("shelter")) ? params.get("shelter") : "";
+  const pets = usePetList();
+  const data = useSelector((state) => selectDashboard(state, shelter));
 
   if (!pets.loaded && pets.status !== "failed") return <StatusMessage kind="loading" message="Counting the pets…" />;
   if (!pets.loaded) {
@@ -21,7 +21,6 @@ export default function DashboardPage() {
   const { total, available, reserved, adopted, vaccinated, averageAge, latest } = data;
   const adoptedShare = total ? Math.round((adopted / total) * 100) : 0;
 
-  // A link to the pets page that keeps the chosen shelter.
   const petsLink = (field, value) => {
     const q = new URLSearchParams({ [field]: value });
     if (shelter) q.set("shelter", shelter);

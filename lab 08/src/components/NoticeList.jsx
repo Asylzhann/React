@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectNotices, dismissNotice } from "../store/notices/noticesSlice";
 import Notice from "./Notice";
 
-// The messages from the store. Each one disappears by itself after 6 seconds.
 function AutoNotice({ notice }) {
   const dispatch = useDispatch();
   useEffect(() => {

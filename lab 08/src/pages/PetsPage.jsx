@@ -11,7 +11,6 @@ import Pagination from "../components/Pagination";
 import PetForm from "../components/PetForm";
 import StatusMessage from "../components/StatusMessage";
 
-// Keep a URL value only if it is one of the allowed values.
 const allowed = (value, list) => (list.includes(value) ? value : "");
 
 export default function PetsPage() {
@@ -27,7 +26,6 @@ export default function PetsPage() {
   const sort = SORTS.some((s) => s.value === params.get("sort")) ? params.get("sort") : "name";
   const requestedPage = Math.max(1, parseInt(params.get("page"), 10) || 1);
 
-  // Redux: the loading state from the hook, the filtered and sorted pets from a memoized selector.
   const pets = usePetList();
   const filtered = useSelector((state) => selectFilteredPets(state, { search, species, status, shelter, sort }));
 
@@ -42,7 +40,6 @@ export default function PetsPage() {
     };
   }, []);
 
-  // Change some URL values. Empty values are removed. Any change except "page" goes back to page 1.
   function update(changes) {
     const next = new URLSearchParams(params);
     for (const [key, value] of Object.entries(changes)) {
@@ -53,16 +50,15 @@ export default function PetsPage() {
     setParams(next);
   }
 
-  // Only the current page is cut out here. Nothing is state: it is calculated on every render.
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const page = Math.min(requestedPage, totalPages); // a page number that is too big becomes the last page
+  const page = Math.min(requestedPage, totalPages);
   const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   async function savePet(values) {
     setSaving(true);
     setFormError("");
     try {
-      const created = await dispatch(createPet(values)).unwrap(); // the success message comes from the store
+      const created = await dispatch(createPet(values)).unwrap();
       if (mounted.current) navigate(`/pets/${created.id}`);
     } catch (err) {
       if (!mounted.current) return;

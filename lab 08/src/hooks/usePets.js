@@ -3,14 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPets, fetchPetById } from "../store/pets/petsSlice";
 import { selectPetsListStatus, selectPetsListError, selectPetsLoaded, selectPetById, selectPetDetails } from "../store/pets/petsSelectors";
 
-// Pages use these hooks and the selectors; they never call the API or write thunk code themselves.
 
-// Loads the pets list when the page opens (the thunk skips the request if the data is still fresh).
 export function usePetList() {
   const dispatch = useDispatch();
   const status = useSelector(selectPetsListStatus);
   const error = useSelector(selectPetsListError);
-  const loaded = useSelector(selectPetsLoaded); // true once the list has arrived at least once
+  const loaded = useSelector(selectPetsLoaded);
 
   useEffect(() => {
     dispatch(fetchPets());
@@ -19,7 +17,6 @@ export function usePetList() {
   return { status, error, loaded, reload: () => dispatch(fetchPets({ force: true })) };
 }
 
-// Loads one pet. `pet` is undefined until its details have arrived.
 export function usePet(id) {
   const dispatch = useDispatch();
   const entry = useSelector((state) => selectPetDetails(state, id));

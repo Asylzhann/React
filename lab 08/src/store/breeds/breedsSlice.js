@@ -4,7 +4,7 @@ import { shouldFetch, errorText } from "../helpers";
 
 const initialState = {
   list: { status: "idle", error: null, requestId: null, loadedAt: null, items: [], fromCache: false, cachedAt: null },
-  details: {}, // breedId -> { status, error, requestId, loadedAt, data }
+  details: {},
 };
 
 // `fresh: true` asks the network instead of a copy saved by the service worker.

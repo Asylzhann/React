@@ -7,12 +7,10 @@ export const petsAdapter = createEntityAdapter();
 
 const initialState = petsAdapter.getInitialState({
   list: { status: "idle", error: null, requestId: null, loadedAt: null },
-  details: {}, // petId -> { status, error, requestId, loadedAt }
+  details: {},
 });
 
-// ---------- thunks ----------
 
-// LIST. `force: true` skips the freshness check (Retry, Reload, after a change).
 export const fetchPets = createAsyncThunk(
   "pets/fetchList",
   async (_arg, { rejectWithValue }) => {
@@ -71,7 +69,6 @@ export const deletePet = createAsyncThunk("pets/delete", async ({ id, name }, { 
   }
 });
 
-// ---------- slice ----------
 
 const petsSlice = createSlice({
   name: "pets",
@@ -83,7 +80,7 @@ const petsSlice = createSlice({
       .addCase(fetchPets.pending, (state, action) => {
         state.list.status = "loading";
         state.list.error = null;
-        state.list.requestId = action.meta.requestId; // "this is the request we wait for"
+        state.list.requestId = action.meta.requestId;
       })
       .addCase(fetchPets.fulfilled, (state, action) => {
         if (state.list.requestId !== action.meta.requestId) return; // an older answer arrived late: ignore it

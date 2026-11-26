@@ -1,12 +1,9 @@
-// How long loaded data counts as fresh. Inside this time a second request is not sent.
+// Loaded data counts as fresh for this long; no second request is sent in that time.
 export const FRESH_FOR = 30_000;
 
-// Used by the `condition` option of the fetch thunks.
-//   entry  = the "list" or "details" part of the state (undefined if never requested)
-//   force  = true for Retry / Refresh / after a mutation: always send the request
 export function shouldFetch(entry, force) {
   if (force || !entry) return true;
-  if (entry.status === "loading") return false; // the same request is already running
+  if (entry.status === "loading") return false;
   return !(entry.status === "succeeded" && Date.now() - entry.loadedAt < FRESH_FOR);
 }
 

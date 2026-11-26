@@ -23,10 +23,10 @@ function PetDetails({ id }) {
   const location = useLocation();
 
   const dispatch = useDispatch();
-  const pet = usePet(id); // invalid ids ("abc") are rejected by the thunk without a request
+  const pet = usePet(id);
   const [editing, setEditing] = useState(false);
-  const [saving, setSaving] = useState(false); // an edit is being saved
-  const [busy, setBusy] = useState(false); // a status change or removal is running
+  const [saving, setSaving] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [formError, setFormError] = useState("");
   const mounted = useRef(true);
@@ -37,7 +37,6 @@ function PetDetails({ id }) {
     };
   }, []);
 
-  // "Back" goes to the previous page if there is one. After a direct visit there is none, so go to the list.
   const goBack = () => (location.key === "default" ? navigate("/pets") : navigate(-1));
 
   const backLinks = (
